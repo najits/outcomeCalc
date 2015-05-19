@@ -55,18 +55,25 @@ var calcOutcomes = function(args) {
 	// Fill nav matrix (periods + 1 x paths) with starting capital amount
 	var navMatrix = math.add(math.zeros(numPeriods + 1, numPaths), initialCapital);
 
-	// Initalize array containing number of successful paths per period
+	// Initalize result arrays (per period)
 	var alivePct = [];
 	alivePct[0] = numPaths;
+	var q25 = []
+	q25[0] = initialCapital;
+	var q50 = [];
+	q50[0] = initialCapital;
+	var q75 = [];
+	q75[0] = initialCapital;
 
 
 	/* Simulate NAVs */
 
 	// Cycle through per period, per path
-	var index, slice, i, j;
+	var index, slice, sliceOrd, i, j;
 	for(i = 0; i < numPeriods; i++) {
 		j = i + 1;
 		alivePct[j] = 0;
+
 		index = math.index(i, [0, numPaths]);
 		slice = math.add(
 					math.dotMultiply(navMatrix.subset(index), returnsMatrix.subset(index)),
@@ -79,6 +86,12 @@ var calcOutcomes = function(args) {
 								return 0;
 							}
 						});
+
+		sliceOrd = slice._data[0].sort(d3.ascending);
+		q25[j] = d3.quantile(sliceOrd, 0.25);
+		q50[j] = d3.quantile(sliceOrd, 0.50);
+		q75[j] = d3.quantile(sliceOrd, 0.75);
+
 		navMatrix.subset(math.index(j, [0, numPaths]), slice);
 	}
 
@@ -98,9 +111,11 @@ var calcOutcomes = function(args) {
 	// Collate results and return
 	var results = {};
 	results.alivePct = alivePct;
+	results.q25 = q25;
+	results.q50 = q50;
+	results.q75 = q75;
 	results.terminalNav = terminalNav;
 
 	return results;
 };
-
 
