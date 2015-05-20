@@ -8,11 +8,11 @@ function isValidNumericInput(n) {
 
 /**
 * args.paths: number of simulation paths
-* args.periods: number of periods per path
+* args.periods: simulation horizon (years)
 * args.portfolioReturnMean: mean portfolio return (% annual)
 * args.portfolioReturnStDev: std dev of portfolio returns (% annual)
 * args.initialCapital: starting capital amount
-* args.netMonthlyFlow: net of capital inflow and output per month
+* args.netMonthlyFlow: net of capital inflow and outflow per month
 **/
 var calcOutcomes = function(args) {
 	/* Process arguments */
@@ -20,26 +20,27 @@ var calcOutcomes = function(args) {
 	// Normal random generated seeded with monthly portfolio return and volatility
 	if(!isNumeric(args.portfolioReturnMean)) { return; }
 	if(!isNumeric(args.portfolioReturnStDev) || (args.portfolioReturnStDev < 0)) { return; }
-	var rand = d3.random.normal((args.portfolioReturnMean / 100) / 12, (args.portfolioReturnStDev / 100) / Math.sqrt(12));
+	var rand = d3.random.normal(args.portfolioReturnMean / 100, args.portfolioReturnStDev / 100);
 
 	// Simulation paths
 	var maxPaths = 10000;
-	var defaultPaths = 1000;
+	var defaultPaths = 5000;
 	var numPaths = isValidNumericInput(args.paths) ? Math.min(args.paths, maxPaths) : defaultPaths;
 
 	// Periods per path
-	var maxPeriods = 360;
-	var defaultPeriods = 120;
+	var maxPeriods = 60;
+	var defaultPeriods = 40;
 	var numPeriods = isValidNumericInput(args.periods) ? Math.min(args.periods, maxPeriods) : defaultPeriods;
 
 	// Inital capital
-	var maxInitalCapital = 1e09;
+	var maxInitalCapital = 1e10;
 	var defaultInitialCapital = 1e06;
 	var initialCapital = isValidNumericInput(args.initialCapital) ? Math.min(args.initialCapital, maxInitalCapital) : defaultInitialCapital;
 
 	// Monthly flow
 	var defaultMonthlyFlow = 0;
 	var monthlyFlow = (args.netMonthlyFlow && isNumeric(args.netMonthlyFlow)) ? args.netMonthlyFlow : defaultMonthlyFlow;
+	monthlyFlow *= 12;
 
 
 	/* Create matrices */
@@ -95,9 +96,6 @@ var calcOutcomes = function(args) {
 		navMatrix.subset(math.index(j, [0, numPaths]), slice);
 	}
 
-
-	/* Summarize results */
-
 	// Convert 'alive' to percentage of scenarios that are successful
 	alivePct = math.multiply(alivePct, (100 / numPaths));
 
@@ -108,7 +106,9 @@ var calcOutcomes = function(args) {
 			terminalNav[index[1]] = value;
 		});
 
-	// Collate results and return
+
+	/* Collate results and return */
+
 	var results = {};
 	results.alivePct = alivePct;
 	results.q25 = q25;
