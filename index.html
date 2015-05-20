@@ -12,11 +12,14 @@
 		Hello! (look at the console...)
 		<script>
 			var simParams = {
-				// paths: 5000,
-				// periods: 40,
+				paths: 10000,
+				periods: 60,
 				portfolioReturnMean: 12.00,
 				portfolioReturnStDev: 8.00,
-				netMonthlyFlow: -10000
+				monthlyWithdrawalAmt: 10000,
+				withdrawalStartOffset: 15,
+				annualSavingsAmt: 100000,
+				savingsDuration: 20
 			};
 			var sim = calcOutcomes(simParams);
 			console.log('Params:');
