@@ -3,29 +3,97 @@
 	<head>
 		<meta charset="utf-8">
 
+		<!-- Styles -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+
 		<!-- Scripts -->
+		<script src="js/vendor/jquery.min.js" type="text/javascript"></script>
+		<script src="js/vendor/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/vendor/math.js" type="text/javascript"></script>
 		<script src="js/vendor/d3.min.js" type="text/javascript"></script>
+		<script src="js/form.js" type="text/javascript"></script>
 	    <script src="js/outcome.js" type="text/javascript"></script>
 	</head>
 	<body>
-		Hello! (look at the console...)
-		<script>
-			var simParams = {
-				paths: 10000,
-				periods: 60,
-				portfolioReturnMean: 12.00,
-				portfolioReturnStDev: 8.00,
-				monthlyWithdrawalAmt: 10000,
-				withdrawalStartOffset: 15,
-				annualSavingsAmt: 100000,
-				savingsDuration: 20
-			};
-			var sim = calcOutcomes(simParams);
-			console.log('Params:');
-			console.log(simParams);
-			console.log('Results:');
-			console.log(sim);
-		</script>
+		<div>
+			<h2>Outcome Calculator</h2>
+			<hr>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="initialCapital" class="col-sm-4 control-label">Initial Capital</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control text-right" id="initialCapital" placeholder="1,000,000" value = "1000000">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="savings" class="col-sm-4 control-label">Yearly Savings</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control text-right" id="savings" placeholder="100,000" value="100000">
+						</div>
+					</div>
+
+					<label for="savingsDuration" class="col-sm-1 control-label">for</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<input type="text" class="form-control text-right" id="savingsDuration" placeholder="20" value="20">
+							<div class="input-group-addon">Years</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="withdrawals" class="col-sm-4 control-label">Monthly Withdrawals</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control text-right" id="withdrawals" placeholder="15,000" value="15000">
+						</div>
+					</div>
+
+					<label for="withdrawalStart" class="col-sm-1 control-label">after</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<input type="text" class="form-control text-right" id="withdrawalStart" placeholder="15" value="15">
+							<div class="input-group-addon">Years</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="portfolioReturns" class="col-sm-4 control-label">Portfolio Returns</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<input type="text" class="form-control text-right" id="portfolioReturns" placeholder="5.00" value="5.00">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="portfolioVol" class="col-sm-4 control-label">Portfolio Volatility</label>
+					<div class="col-sm-2">
+						<div class="input-group">
+							<input type="text" class="form-control text-right" id="portfolioVol" placeholder="10.00" value="10.00">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-2">
+						<input id="submit" type="button" class="btn btn-success" value="Calculate">
+					</div>
+				</div>
+
+			</form>
+			<hr>
+			<div id="results"></div>
+		</div>
 	</body>
 </html>
