@@ -1,4 +1,4 @@
-$(document).ready(function() {
+var main = function() {
 	$('#submit').click(function() {
 		var simParams = {
 			paths: 5000,
@@ -16,11 +16,14 @@ $(document).ready(function() {
 		console.log('Results:');
 		console.log(sim);
 
-		$('#results').empty();
-		$('#results').append("<h4>Parameters:</h4>");
+		$('.results').empty();
+		$('<h4>').text('Parameters').appendTo('.results');
+		$('<ul>').appendTo('.results').addClass('parameters');
 		for(var prop in simParams) {
 			var item = '<li>' + prop + ': ' + simParams[prop];
-			$('#results').append(item);
+			$('.parameters').append(item);
 		}
 	});
-});
+};
+
+$(document).ready(main);
